@@ -65,8 +65,8 @@ const connection = await connect()
   const candles = await getCandles({
     connection,
     symbols: ["NSE:NIFTY",'FX:AUDCAD', 'FX:AUDCHF'],
-    amount: 1,
-    timeframe: 60
+    amount: 2,
+    timeframe: 5
   })
   await connection.close()
   console.log(candles[0])
@@ -119,8 +119,13 @@ app.get('/', async (req, res) => {
   
   const result2 = await asyncCall()
   console.log(result2[0].timestamp)
+  const unixTimestamp = result2[0].timestamp
+
+const milliseconds = unixTimestamp * 1000 // 1575909015000
  const result = await asyncFunc()
- return res.send(result)
+ const dt= new Date(milliseconds)
+ //return res.send(dt.toLocaleString())
+ return res.json(result2[0])
 })
 
 
