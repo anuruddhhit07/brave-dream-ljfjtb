@@ -45,16 +45,88 @@ chart.onError((...err) => { // Listen for errors (can avoid crash)
 chart.onSymbolLoaded(() => { // When the symbol is successfully loaded
   console.log(`Market "${chart.infos.description}" loaded !`);
 });
-
+/*
 chart.onUpdate(() => { // When price changes
   if (!chart.periods[0]) return;
-  console.log(`[${chart.infos.description}]: ${chart.periods[0].close} ${chart.infos.currency_id}`);
+  console.log(`[${chart.infos.description}]:h ${chart.periods[0].close} ${chart.infos.currency_id}`);
   // Do something...
 });
+*/
+
+const asyncFunc = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve("Helloo World!"), 1000)
+  })
+}
+
+async function asyncCall() {
+  console.log('calling');
+const connection = await connect()
+  const candles = await getCandles({
+    connection,
+    symbols: ["NSE:NIFTY",'FX:AUDCAD', 'FX:AUDCHF'],
+    amount: 1,
+    timeframe: 60
+  })
+  await connection.close()
+  console.log(candles[0])
+  //console.log(`Candles for AUDCAD:`, candles[0])
+ // console.log(`Candles for AUDCHF:`, candles[1])
+  return candles[0]
+  // Expected output: "resolved"
+}
+console.log("value",asyncCall())
+
+/*
+const  tvasyncfn=() =>{
+  const connection = await connect()
+  const candles = await getCandles({
+    connection,
+    symbols: ['FX:AUDCAD', 'FX:AUDCHF'],
+    amount: 10_000,
+    timeframe: 60
+  })
+  await connection.close()
+  console.log(`Candles for AUDCAD:`, candles[0])
+  console.log(`Candles for AUDCHF:`, candles[1])
+  return candles
+}
+console.log("value",tvasyncfn())
+
+*/
+
+app.get('/', async (req, res) => {
+  /*
+  let aa=2
+  chart.onUpdate(()=>{
+    if(!chart.periods[0]) return;
+    console.log("hhhh")
+    aa= 1
+   // return res.send("1344")
+  })
+  */
+  /*
+  const connection = await connect()
+  const candles = await getCandles({
+    connection,
+    symbols: ['FX:AUDCAD', 'FX:AUDCHF'],
+    amount: 2,
+    timeframe: 60
+  })
+  await connection.close()
+  console.log(candles)
+  */
+  
+  const result2 = await asyncCall()
+  console.log(result2[0].timestamp)
+ const result = await asyncFunc()
+ return res.send(result)
+})
 
 
-app.get('/', (req, res) => {
+app.get('/home', async (req, res) => {
   //res.send('Hello World!')
+  /*
  (async function(){
    const connection = await connect()
    const candles = await getCandles({
@@ -68,7 +140,17 @@ app.get('/', (req, res) => {
   console.log(`Candles for AUDCHF:`, candles[1])
     console.log("hi")
  }())
+ */
  
+ /*
+ chart.onUpdate(() => { // When price changes
+  if (!chart.periods[0]) return;
+  console.log(`[${chart.infos.description}]:gg ${chart.periods[0].close} ${chart.infos.currency_id}`);
+  // Do something...
+});
+ */
+
+  /*
  tv.setup().then(() =>
   tv.getTicker(bitcoinSymbol).then((ticker) =>
     ticker
@@ -79,7 +161,10 @@ app.get('/', (req, res) => {
       })
   )
 );
-  res.send("hiii")
+*/
+const result = await asyncFunc()
+  return res.send(result)
+ // res.send("hiii")
 })
 
 app.listen(port, () => {
